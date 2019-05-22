@@ -10,9 +10,9 @@
   "author": "takahiro.sato",
   "license": "ISC",
   "dependencies": {
+    "@avatsaev/three-orbitcontrols-ts": "^0.1.5",
     "cannon": "^0.6.2",
-    "three": "^0.104.0",
-    "three-orbitcontrols-ts": "git+https://git@github.com/nicolaspanel/three-orbitcontrols-ts.git"
+    "three": "^0.104.0"
   },
   "devDependencies": {
     "@webpack-cli/init": "^0.1.5",
