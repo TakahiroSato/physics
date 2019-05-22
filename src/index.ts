@@ -12,14 +12,14 @@ for(let i = 0; i < 100; i++){
   const mz = Math.floor(Math.random() * 50) - 25;
   phy
     .addBox({
-      mass: 1,
-      w: 10,
-      h: 10,
-      d: 10,
+      mass: 0.1,
+      w: Math.abs(mx),
+      h: Math.abs(my),
+      d: Math.abs(mz),
       x: x,
       y: y,
       z: z,
-      color: "#ff0000"
+      color: "#ffaabb"
     })
     .setVelocity(mx, my, mz);
   }

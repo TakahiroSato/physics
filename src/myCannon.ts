@@ -30,9 +30,15 @@ export class myCannon {
       z?: number
     }
   ) {
+    obj.w *= 0.1;
+    obj.h *= 0.1;
+    obj.d *= 0.1;
     if(!obj.x) obj.x = 0;
     if(!obj.y) obj.y = 0;
     if(!obj.z) obj.z = obj.d
+    obj.x *= 0.1;
+    obj.y *= 0.1;
+    obj.z *= 0.1;
     const shape = new CANNON.Box(new CANNON.Vec3(obj.w, obj.h, obj.d));
     const phyBox = new CANNON.Body({ mass: obj.mass, shape: shape });
     phyBox.position.set(obj.x, obj.y, obj.z);

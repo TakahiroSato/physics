@@ -94,16 +94,16 @@ export class myThreeJs {
     this.scene.add(axes);
     // 平行光源
     const directionalLight = new THREE.DirectionalLight(0xffffff);
-    directionalLight.position.set(-100, 0, 200);
+    directionalLight.position.set(-500, 0, 1000);
     //directionalLight.lookAt(0, 0, 0);
     directionalLight.shadow.camera.near = this.near;
     directionalLight.shadow.camera.far = this.far;
     directionalLight.shadow.camera.top = this.far;
-    directionalLight.shadow.camera.bottom = this.far * (-1);
-    directionalLight.shadow.camera.left = this.far * (-1);
+    directionalLight.shadow.camera.bottom = this.far * -1;
+    directionalLight.shadow.camera.left = this.far * -1;
     directionalLight.shadow.camera.right = this.far;
-    directionalLight.shadow.mapSize.width = 4096;
-    directionalLight.shadow.mapSize.height = 4096;
+    directionalLight.shadow.mapSize.width = 2048;
+    directionalLight.shadow.mapSize.height = 2048;
     directionalLight.castShadow = true;
     this.scene.add(directionalLight);
     this.scene.add(new THREE.CameraHelper(directionalLight.shadow.camera));
@@ -124,7 +124,7 @@ export class myThreeJs {
     // );
     //this.camera.up.set(0, 1, 0);
     //this.camera.position.set(0, 0, this.height / 2);
-    this.camera.position.set(0, -100, 100);
+    this.camera.position.set(0, -50, 50);
     //this.camera.lookAt(new THREE.Vector3(0, 0, 0));
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableZoom = true;
@@ -197,24 +197,23 @@ export class myThreeJs {
     return obj;
   }
   drawBox(obj: {
-    x?: number,
-    y?: number,
-    z?: number,
-    w: number,
-    h: number,
-    d: number,
-    color: string
-  }
-  ) {
+    x?: number;
+    y?: number;
+    z?: number;
+    w: number;
+    h: number;
+    d: number;
+    color: string;
+  }) {
     const ret = new threejsObject(this);
-    ret.geometry = new THREE.BoxGeometry(obj.w, obj.h, obj.d);
-    ret.material = new THREE.MeshLambertMaterial({ color: obj.color });
+    ret.geometry = new THREE.BoxGeometry(obj.w, obj.h, obj.d, 10, 10);
+    ret.material = new THREE.MeshPhongMaterial({ color: obj.color });
     ret.material.transparent = true;
     ret.material.opacity = this.globalAlpha;
     ret.mesh = new THREE.Mesh(ret.geometry, ret.material);
     ret.mesh.castShadow = true;
     this.scene.add(ret.mesh);
-    ret.setPos((obj.x || 0), (obj.y || 0), (obj.z || 0));
+    ret.setPos(obj.x || 0, obj.y || 0, obj.z || 0);
     this.objectsArray.push(ret);
     return ret;
   }
@@ -246,7 +245,7 @@ export class myThreeJs {
     color: string
   ) {
     const obj = new threejsObject(this);
-    obj.geometry = new THREE.PlaneGeometry(w, h);
+    obj.geometry = new THREE.PlaneGeometry(w, h, 100, 100);
     obj.material = new THREE.MeshLambertMaterial({
       color: color,
       side: THREE.DoubleSide
