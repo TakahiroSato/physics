@@ -14,7 +14,7 @@ export class myCannon {
     this.world.gravity.set(0, 0, -9.82);
     this.world.broadphase = new CANNON.NaiveBroadphase();
     this.world.solver.iterations = 8;
-    this.world.solver.torerance = 0.1;
+    //this.world.solver.torerance = 0.1;
     // 地面
     const phyPlane = new CANNON.Body({ mass: 0, shape: new CANNON.Plane() });
     //phyPlane.quaternion.setFromAxisAngle(new Cannon.Vec3(1, 0, 0), -Math.PI/ 2);
@@ -30,35 +30,32 @@ export class myCannon {
       z?: number
     }
   ) {
-    obj.w *= 0.1;
-    obj.h *= 0.1;
-    obj.d *= 0.1;
     if(!obj.x) obj.x = 0;
     if(!obj.y) obj.y = 0;
     if(!obj.z) obj.z = obj.d
-    obj.x *= 0.1;
-    obj.y *= 0.1;
-    obj.z *= 0.1;
     const shape = new CANNON.Box(new CANNON.Vec3(obj.w, obj.h, obj.d));
     const phyBox = new CANNON.Body({ mass: obj.mass, shape: shape });
     phyBox.position.set(obj.x, obj.y, obj.z);
     this.world.add(phyBox);
     return new cannonObject(phyBox);
   }
-  addSphere(
+  addSphere(obj: {
     mass: number,
     radius: number,
-    x: number = 0,
-    y: number = 0,
-    z: number = radius
-  ) {
-    const sphereShape = new CANNON.Sphere(radius);
-    const sphereBody = new CANNON.Body({ mass: mass, shape: sphereShape });
-    sphereBody.position.set(x, y, z);
+    x?: number,
+    y?: number,
+    z?: number
+  }) {
+    if(!obj.x) obj.x = 0;
+    if(!obj.y) obj.y = 0;
+    if(!obj.z) obj.z = obj.radius;
+    const sphereShape = new CANNON.Sphere(obj.radius);
+    const sphereBody = new CANNON.Body({ mass: obj.mass, shape: sphereShape });
+    sphereBody.position.set(obj.x, obj.y, obj.z);
     this.world.add(sphereBody);
     return new cannonObject(sphereBody);
   }
-  step(){
-    this.world.step(1 / 60);
+  step(time:number, lastTime:number){
+    this.world.step(1 / 60, (time-lastTime) / 1000, 3);
   }
 }

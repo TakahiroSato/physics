@@ -102,8 +102,8 @@ export class myThreeJs {
     directionalLight.shadow.camera.bottom = this.far * -1;
     directionalLight.shadow.camera.left = this.far * -1;
     directionalLight.shadow.camera.right = this.far;
-    directionalLight.shadow.mapSize.width = 2048;
-    directionalLight.shadow.mapSize.height = 2048;
+    directionalLight.shadow.mapSize.width = 1024;
+    directionalLight.shadow.mapSize.height = 1024;
     directionalLight.castShadow = true;
     this.scene.add(directionalLight);
     this.scene.add(new THREE.CameraHelper(directionalLight.shadow.camera));
@@ -124,7 +124,7 @@ export class myThreeJs {
     // );
     //this.camera.up.set(0, 1, 0);
     //this.camera.position.set(0, 0, this.height / 2);
-    this.camera.position.set(0, -50, 50);
+    this.camera.position.set(0, -25, 25);
     //this.camera.lookAt(new THREE.Vector3(0, 0, 0));
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableZoom = true;
@@ -217,24 +217,22 @@ export class myThreeJs {
     this.objectsArray.push(ret);
     return ret;
   }
-  drawSphere(
-    x: number,
-    y: number,
-    z: number,
+  drawSphere(obj:{
+    x?: number,
+    y?: number,
+    z?: number,
     radius: number,
-    w: number,
-    h: number,
     color: string
-  ) {
-    const obj = new threejsObject(this);
-    obj.geometry = new THREE.SphereGeometry(radius, w, h);
-    obj.material = new THREE.MeshLambertMaterial({ color: color });
-    obj.mesh = new THREE.Mesh(obj.geometry, obj.material);
-    obj.mesh.castShadow = true;
-    obj.setPos(x, y, z);
-    this.scene.add(obj.mesh);
-    this.objectsArray.push(obj);
-    return obj;
+  }) {
+    const ret = new threejsObject(this);
+    ret.geometry = new THREE.SphereGeometry(obj.radius, 10, 10);
+    ret.material = new THREE.MeshLambertMaterial({ color: obj.color });
+    ret.mesh = new THREE.Mesh(ret.geometry, ret.material);
+    ret.mesh.castShadow = true;
+    ret.setPos(obj.x || 0, obj.y || 0, obj.z || 0);
+    this.scene.add(ret.mesh);
+    this.objectsArray.push(ret);
+    return ret;
   }
   drawPlane(
     x: number,
@@ -251,7 +249,7 @@ export class myThreeJs {
       side: THREE.DoubleSide
     });
     obj.mesh = new THREE.Mesh(obj.geometry, obj.material);
-    obj.mesh.receiveShadow = true;
+    //obj.mesh.receiveShadow = true;
     obj.setPos(x, y, z);
     this.scene.add(obj.mesh);
     this.objectsArray.push(obj);

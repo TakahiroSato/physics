@@ -1,6 +1,8 @@
 import { threejsObject, myThreeJs } from "./myThreeJs";
 import { cannonObject, myCannon } from "./myCannon";
 
+let lastTime: number | null = null;
+
 export class physicsObject {
   public threeObj: threejsObject;
   public cannonObj: cannonObject;
@@ -14,10 +16,14 @@ export class physicsObject {
       this.cannonObj.body.quaternion
     );
   }
-  setVelocity(x:number, y:number, z:number){
+  setVelocity(x: number, y: number, z: number) {
     this.cannonObj.body.velocity.set(x, y, z);
+    return this;
+  }
+  setAngularVelocity(x: number, y: number, z: number, damping:number=0.1) {
     this.cannonObj.body.angularVelocity.set(x, y, z);
-    this.cannonObj.body.angularDamping = 0.1;
+    this.cannonObj.body.angularDamping = damping;
+    return this;
   }
 }
 
@@ -52,11 +58,31 @@ export class physics extends myThreeJs {
     this.objArray.push(ret);
     return ret;
   }
-  update(){
+  addSphere(obj: {
+    mass: number;
+    radius: number;
+    color: string;
+    x?: number;
+    y?: number;
+    z?: number;
+  }) {
+    if (!obj.x) obj.x = 0;
+    if (!obj.y) obj.y = 0;
+    if (!obj.z) obj.z = obj.radius;
+    const cannonObj = this.cannon.addSphere(obj);
+    const threeObj = super.drawSphere(obj);
+    const ret = new physicsObject(threeObj, cannonObj);
+    this.objArray.push(ret);
+    return ret;
+  }
+  update(time: number) {
     this.objArray.map(o => {
       o.update();
     });
-    this.cannon.step();
+    if (lastTime) {
+      this.cannon.step(time, lastTime);
+    }
     this.render();
+    lastTime = time;
   }
 }
