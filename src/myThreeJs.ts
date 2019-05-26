@@ -217,12 +217,12 @@ export class myThreeJs {
     this.objectsArray.push(ret);
     return ret;
   }
-  drawSphere(obj:{
-    x?: number,
-    y?: number,
-    z?: number,
-    radius: number,
-    color: string
+  drawSphere(obj: {
+    x?: number;
+    y?: number;
+    z?: number;
+    radius: number;
+    color: string;
   }) {
     const ret = new threejsObject(this);
     ret.geometry = new THREE.SphereGeometry(obj.radius, 10, 10);
@@ -254,6 +254,10 @@ export class myThreeJs {
     this.scene.add(obj.mesh);
     this.objectsArray.push(obj);
     return obj;
+  }
+  unproject(normX: number, normY: number, normZ: number=1) {
+    const pos = new THREE.Vector3(normX, normY, normZ);
+    return pos.unproject(this.camera);
   }
   clear() {
     while (this.objectsArray.length > 0) {

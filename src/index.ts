@@ -1,4 +1,5 @@
 import { physics } from "./physics";
+import * as THREE from "three";
 const Stats = require("stats-js");
 
 const phy = new physics("canvas3d");
@@ -20,7 +21,12 @@ for (let k = 0; k < 4; k++) {
   }
 }
 
-document.addEventListener("click", ball);
+document.addEventListener("click", e => {
+  const mouseX = (e.clientX/window.innerWidth) * 2 - 1;
+  const mouseY = -(e.clientY/window.innerHeight) * 2 + 1;
+  const pos = phy.unproject(mouseX, mouseY);
+  ball(pos.x, pos.y, pos.z);
+})
 
 const stats = new Stats();
 stats.showPanel(0);
@@ -37,14 +43,15 @@ function animate(time: number) {
 
 requestAnimationFrame(animate);
 
-function ball() {
+function ball(x:number, y:number, z:number) { 
   phy
     .addSphere({
       mass: 1,
       radius: 2,
       color: "#aaaaff",
-      y: -20,
-      z: 4
+      x: x,
+      y: y,
+      z: z
     })
     .setVelocity(0, 30, 0)
 }
