@@ -72,7 +72,7 @@ export class myThreeJs {
     this._height = 0;
     this.fov = 90; // 画角
     this.near = 0.1; // 視体積手前までの距離
-    this.far = 1500; // 視体積奥までの距離
+    this.far = 250; // 視体積奥までの距離
     this.sx = 0;
     this.sy = 0;
     this.backGroundColor = "#000000";
@@ -125,7 +125,7 @@ export class myThreeJs {
     //this.camera.up.set(0, 1, 0);
     //this.camera.position.set(0, 0, this.height / 2);
     this.camera.position.set(0, -25, 25);
-    //this.camera.lookAt(new THREE.Vector3(0, 0, 0));
+    this.camera.lookAt(new THREE.Vector3(0, 0, 0));
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableZoom = true;
     this.controls.zoomSpeed = 1.0;
@@ -206,8 +206,8 @@ export class myThreeJs {
     color: string;
   }) {
     const ret = new threejsObject(this);
-    ret.geometry = new THREE.BoxGeometry(obj.w, obj.h, obj.d, 10, 10);
-    ret.material = new THREE.MeshPhongMaterial({ color: obj.color });
+    ret.geometry = new THREE.BoxGeometry(obj.w, obj.h, obj.d, 2, 2);
+    ret.material = new THREE.MeshLambertMaterial({ color: obj.color });
     ret.material.transparent = true;
     ret.material.opacity = this.globalAlpha;
     ret.mesh = new THREE.Mesh(ret.geometry, ret.material);
@@ -225,7 +225,7 @@ export class myThreeJs {
     color: string;
   }) {
     const ret = new threejsObject(this);
-    ret.geometry = new THREE.SphereGeometry(obj.radius, 10, 10);
+    ret.geometry = new THREE.SphereGeometry(obj.radius);
     ret.material = new THREE.MeshLambertMaterial({ color: obj.color });
     ret.mesh = new THREE.Mesh(ret.geometry, ret.material);
     ret.mesh.castShadow = true;
@@ -243,7 +243,7 @@ export class myThreeJs {
     color: string
   ) {
     const obj = new threejsObject(this);
-    obj.geometry = new THREE.PlaneGeometry(w, h, 100, 100);
+    obj.geometry = new THREE.PlaneGeometry(w, h, 1, 1);
     obj.material = new THREE.MeshLambertMaterial({
       color: color,
       side: THREE.DoubleSide
@@ -255,9 +255,16 @@ export class myThreeJs {
     this.objectsArray.push(obj);
     return obj;
   }
-  unproject(normX: number, normY: number, normZ: number=1) {
+  unproject(normX: number, normY: number, normZ: number=1):THREE.Vector3{
     const pos = new THREE.Vector3(normX, normY, normZ);
     return pos.unproject(this.camera);
+  }
+  cameraPos():THREE.Vector3{
+    return this.camera.position;
+  }
+  cameraLookVec():THREE.Vector3{
+    const forward = (new THREE.Vector4(0, 0, -1, 0).applyMatrix4(this.camera.matrix).normalize());
+    return new THREE.Vector3(forward.x, forward.y, forward.z);
   }
   clear() {
     while (this.objectsArray.length > 0) {

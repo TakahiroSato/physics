@@ -56,6 +56,6 @@ export class myCannon {
     return new cannonObject(sphereBody);
   }
   step(time:number, lastTime:number){
-    this.world.step(1 / 60, (time-lastTime) / 1000, 3);
+    this.world.step(1 / 60, (time-lastTime) / 1000, 10);
   }
 }

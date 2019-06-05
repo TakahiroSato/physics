@@ -8,7 +8,7 @@ for (let k = 0; k < 4; k++) {
   for (let i = 0; i < 4; i++) {
     for (let j = 0; j < 4; j++) {
       phy.addBox({
-        mass: 0.1,
+        mass: 0.01,
         w: 1,
         h: 1,
         d: 1,
@@ -22,10 +22,13 @@ for (let k = 0; k < 4; k++) {
 }
 
 document.addEventListener("click", e => {
-  const mouseX = (e.clientX/window.innerWidth) * 2 - 1;
-  const mouseY = -(e.clientY/window.innerHeight) * 2 + 1;
-  const pos = phy.unproject(mouseX, mouseY);
-  ball(pos.x, pos.y, pos.z);
+  // const mouseX = (e.clientX/window.innerWidth) * 2 - 1;
+  // const mouseY = -(e.clientY/window.innerHeight) * 2 + 1;
+  // const pos = phy.unproject(mouseX, mouseY);
+  const pos = phy.cameraPos();
+  const mv = phy.cameraLookVec();
+  ball(pos.x, pos.y, pos.z, mv.x, mv.y, mv.z);
+  //randomBox();
 })
 
 const stats = new Stats();
@@ -34,26 +37,26 @@ document.body.appendChild(stats.dom);
 
 // main loop
 function animate(time: number) {
+  requestAnimationFrame(animate);
   stats.begin();
   // monitored code goes here
   phy.update(time);
   stats.end();
-  requestAnimationFrame(animate);
 }
 
 requestAnimationFrame(animate);
 
-function ball(x:number, y:number, z:number) { 
+function ball(x:number, y:number, z:number, mx:number, my:number, mz:number) { 
   phy
     .addSphere({
-      mass: 1,
+      mass: 0.2,
       radius: 2,
       color: "#aaaaff",
-      x: x,
-      y: y,
-      z: z
+      x: x+mx*5,
+      y: y+my*5,
+      z: z+mz*5
     })
-    .setVelocity(0, 30, 0)
+    .setVelocity(mx*30, my*30, mz*30)
 }
 
 function randomBox() {
@@ -67,9 +70,9 @@ function randomBox() {
     phy
       .addBox({
         mass: 0.1,
-        w: Math.abs(mx),
-        h: Math.abs(my),
-        d: Math.abs(mz),
+        w: 1,
+        h: 1,
+        d: 1,
         x: x,
         y: y,
         z: z,
