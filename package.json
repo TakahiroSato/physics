@@ -15,7 +15,7 @@
     "three": "^0.104.0"
   },
   "devDependencies": {
-    "@webpack-cli/init": "^0.1.5",
+    "@webpack-cli/init": "^0.2.2",
     "stats-js": "^1.0.1",
     "ts-loader": "^6.0.1",
     "typescript": "^3.4.5",
