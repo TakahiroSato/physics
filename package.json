@@ -12,7 +12,7 @@
   "dependencies": {
     "@avatsaev/three-orbitcontrols-ts": "^0.1.5",
     "cannon": "^0.6.2",
-    "three": "^0.104.0"
+    "three": "^0.137.0"
   },
   "devDependencies": {
     "@webpack-cli/init": "^0.2.2",
